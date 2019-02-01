@@ -49,8 +49,8 @@ int pivotedBinarySearch(int a[], int low, int high, int val)
 
 int main()
 {
-  int A[7] = {6,7,1,2,3,4,5};
-  int idx = pivotedBinarySearch(A,0,6,7);
+  int A[1] = {5};
+  int idx = pivotedBinarySearch(A,0,0,5);
   cout<<idx<<endl;
   return 0;
 }
