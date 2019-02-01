@@ -41,8 +41,10 @@ int pivotedBinarySearch(int a[], int low, int high, int val)
     return binarySearch(a, low, high, val);
   if(val>a[0])
     return binarySearch(a, low, piv, val);
-  else
+  else if(val<a[0])
     return binarySearch(a, piv+1, high, val);
+  else if(val==a[0])
+    return binarySearch(a, low, high, val);
 }
 
 int main()
