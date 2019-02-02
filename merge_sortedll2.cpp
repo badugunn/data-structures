@@ -155,22 +155,68 @@ void printRevRec(Node* head)
   cout<<head->data<<endl;
 }
 
+void mergenSort(Node* head1, Node* head2, Node** newhead)
+{
+  if(head1==NULL)
+  {
+    *newhead = head2;
+    return;
+  }
+  if(head2==NULL)
+  {
+    *newhead = head1;
+    return;
+  }
+  if(head1 && head2)
+  {
+
+    if((head1->data)<(head2->data))
+    {
+      *newhead = head1;
+      head1=head1->next;
+    }
+    else
+    {
+      *newhead = head2;
+      head2=head2->next;
+    }
+    //*newhead = tmphead;
+    Node* tmphead = *newhead;
+    while((head1!=NULL) && (head2!=NULL))
+    {
+      if((head1->data)<=(head2->data))
+      {
+        tmphead->next = head1;
+        tmphead = head1;
+        head1 = head1->next;
+      }
+      else
+      {
+        tmphead->next = head2;
+        tmphead = head2;
+        head2=head2->next;
+      }
+    }
+    if(head1==NULL) tmphead->next = head2;
+    if(head2==NULL) tmphead->next = head1;
+  }
+}
 
 int main()
 {
-  Node* head = NULL;
-  insertAtTail(&head,1);
-  insertAtTail(&head, 2);
-  insertAtTail(&head, 3);
-  insertatN(&head, 4,2);
-  printFwd(head);
-  deleteatN(&head, 4);
-  printFwd(head);
-  recRev(&head, head);
-  cout<<"Print reverse recursion"<<endl;
-  printRevRec(head);
-  delKey(&head, 2);
-  cout<<"O/p after deleting"<<endl;
-  printFwd(head);
+  Node* head1 = NULL;
+  Node* head2 = NULL;
+  Node* head3 = NULL;
+  Node* head4 = NULL;
+  insertAtTail(&head1,5);
+//  insertAtTail(&head1, 10);
+//  insertAtTail(&head1, 15);
+  insertAtTail(&head2, 2);
+  insertAtTail(&head2, 3);
+  insertAtTail(&head2, 20);
+  printFwd(head1);
+  printFwd(head2);
+  mergenSort(head1, head2, &head4);
+  printFwd(head4);
   return 0;
 }
