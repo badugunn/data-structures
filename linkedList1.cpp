@@ -115,6 +115,26 @@ void recRev(Node* p)
   }
 }
 
+void delKey(int key)
+{
+  if(head->data==key)
+  {
+    Node* tmpd = head;
+    head = head->next;
+    free(tmpd);
+  }
+  else
+  {
+    Node* tmp = head;
+    while(tmp->next->data!=key)
+    {
+      tmp = tmp->next;
+    }
+    Node* tmpd = tmp->next;
+    tmp->next = tmpd->next;
+    free(tmpd);
+  }
+}
 
 void printFwd()
 {
@@ -148,5 +168,8 @@ int main()
   recRev(head);
   cout<<"Print reverse recursion"<<endl;
   printRevRec(head);
+  delKey(2);
+  cout<<"O/p after deleting"<<endl;
+  printFwd();
   return 0;
 }
