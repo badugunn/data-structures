@@ -224,6 +224,40 @@ Node* mergeRec(Node* head1, Node* head2)
   return result;
 }
 
+
+
+void frontbacksplit(Node* ref, Node** first, Node** second)
+{
+  Node* slow = ref;
+  Node* fast = ref->next;
+  while(fast!=NULL)
+  {
+    fast=fast->next;
+    if(fast!=NULL)
+    {
+      fast=fast->next;
+      slow=slow->next;
+    }
+  }
+  *first = ref;
+  *second = slow->next;
+  slow->next = NULL;
+}
+
+void MergeSort(Node** headRef)
+{
+  Node* head = *headRef;
+  Node* a;
+  Node* b;
+  if((head==NULL)||(head->next==NULL))
+    return;
+  frontbacksplit(head, &a, &b);
+  MergeSort(&a);
+  MergeSort(&b);
+  *headRef = mergeRec(a, b);
+}
+
+
 int main()
 {
   Node* head1 = NULL;
@@ -241,5 +275,21 @@ int main()
   printFwd(head2);
   head4 = mergeRec(head1, head2);
   printFwd(head4);
+  Node* a; Node* b;
+  frontbacksplit(head4, &a, &b);
+  printFwd(a);
+  printFwd(b);
+  cout<<"Making an unsorted list"<<endl;
+  Node* nHead = NULL;
+  insertAtTail(&nHead, 98);
+  insertAtTail(&nHead, 198);
+  insertAtTail(&nHead, 908);
+  insertAtTail(&nHead, 8);
+  insertAtTail(&nHead, 68);
+  printFwd(nHead);
+  MergeSort(&nHead);
+  cout<<"Sorted List"<<endl;
+  printFwd(nHead);
+
   return 0;
 }
