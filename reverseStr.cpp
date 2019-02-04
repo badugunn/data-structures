@@ -1,6 +1,7 @@
 #include<iostream>
 #include<stdlib.h>
 #include<stdio.h>
+#include<stack>
 using namespace std;
 
 
@@ -31,6 +32,7 @@ void reverseStr2(string& s)
 
 int main()
 {
+  stack <char> s;
   string nam;
   nam = "Hari";
   int naml = 0;
@@ -56,4 +58,17 @@ int main()
   cout<<op<<endl;
   reverseStr2(namc);
   cout<<namc<<endl;
+
+  for(int i=0; i<namc.length(); i++)
+  {
+    s.push(namc[i]);
+  }
+  for(int i=0; i<namc.length(); i++)
+  {
+    namc[i]=s.top();
+    s.pop();
+  }
+  cout<<namc<<endl;
+
+
 }
