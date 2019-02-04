@@ -6,6 +6,7 @@ using namespace std;
 struct Node {
   int data;
   Node* next;
+  int marked=0;
 };
 
 //Node* head = NULL;
@@ -202,6 +203,102 @@ void mergenSort(Node* head1, Node* head2, Node** newhead)
   }
 }
 
+
+
+Node* mergeRec(Node* head1, Node* head2)
+{
+  Node* result = NULL;
+  if(head1==NULL)
+    return head2;
+  if(head2==NULL)
+    return head1;
+  if(head1->data < head2->data)
+  {
+    result = head1;
+    result->next = mergeRec(head1->next, head2);
+  }
+  else
+  {
+    result = head2;
+    result->next = mergeRec(head1, head2->next);
+  }
+  return result;
+}
+
+
+
+void frontbacksplit(Node* ref, Node** first, Node** second)
+{
+  Node* slow = ref;
+  Node* fast = ref->next;
+  while(fast!=NULL)
+  {
+    fast=fast->next;
+    if(fast!=NULL)
+    {
+      fast=fast->next;
+      slow=slow->next;
+    }
+  }
+  *first = ref;
+  *second = slow->next;
+  slow->next = NULL;
+}
+
+void MergeSort(Node** headRef)
+{
+  Node* head = *headRef;
+  Node* a;
+  Node* b;
+  if((head==NULL)||(head->next==NULL))
+    return;
+  frontbacksplit(head, &a, &b);
+  MergeSort(&a);
+  MergeSort(&b);
+  *headRef = mergeRec(a, b);
+}
+
+void swapNodes(Node** headRef, int x, int y)
+{
+  if(x==y)
+    return;
+  Node* prevX = NULL; Node* curX = *headRef;
+  while(curX && curX->data!=x)
+  {
+    prevX = curX;
+    curX = curX->next;
+  }
+  if(curX==NULL) return;
+  Node* curY=*headRef; Node* prevY=NULL;
+  while(curY && curY->data!=y)
+  {
+    prevY = curY;
+    curY=curY->next;
+  }
+  if(curY==NULL) return;
+  if(prevX!=NULL) prevX->next=curY;
+  else *headRef = curY;
+  if(prevY!=NULL) prevY->next=curX;
+  else *headRef = curX;
+  Node* temp = curX->next;
+  curX->next = curY->next;
+  curY->next = temp;
+}
+
+
+void detectAndRemoveLoop(struct Node* temp)
+{
+  Node* prev = NULL;
+  while(temp->marked!=1 && temp)
+  {
+    temp->marked=1;
+    prev = temp;
+    temp = temp->next;
+    cout<< temp->data <<endl;
+  }
+  if(temp->marked==1) prev->next=NULL;
+}
+
 int main()
 {
   Node* head1 = NULL;
@@ -217,7 +314,24 @@ int main()
   insertAtTail(&head2, 200);
   printFwd(head1);
   printFwd(head2);
-  mergenSort(head1, head2, &head4);
+  head4 = mergeRec(head1, head2);
   printFwd(head4);
+  Node* a; Node* b;
+  frontbacksplit(head4, &a, &b);
+  printFwd(a);
+  printFwd(b);
+  cout<<"Making an unsorted list"<<endl;
+  Node* nHead = NULL;
+  insertAtTail(&nHead, 98);
+  insertAtTail(&nHead, 198);
+  insertAtTail(&nHead, 908);
+  insertAtTail(&nHead, 8);
+  insertAtTail(&nHead, 68);
+  printFwd(nHead);
+  MergeSort(&nHead);
+  cout<<"Sorted List"<<endl;
+  printFwd(nHead);
+  swapNodes(&nHead, 68, 98);
+  printFwd(nHead);
   return 0;
 }

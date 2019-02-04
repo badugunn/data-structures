@@ -6,6 +6,7 @@ using namespace std;
 struct Node {
   int data;
   Node* next;
+  int marked=0;
 };
 
 //Node* head = NULL;
